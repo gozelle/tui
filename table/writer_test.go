@@ -2,8 +2,8 @@ package table
 
 import (
 	"fmt"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 func Example_simple() {
@@ -21,7 +21,7 @@ func Example_simple() {
 	tw.AppendFooter(Row{"", "", "Total", 10000})
 	// render it
 	fmt.Printf("Table without any customizations:\n%s", tw.Render())
-
+	
 	// Output: Table without any customizations:
 	// +-----+------------+-----------+--------+-----------------------------+
 	// |   # | FIRST NAME | LAST NAME | SALARY |                             |
@@ -62,7 +62,7 @@ func Example_styled() {
 	tw.Style().Options.SeparateColumns = false
 	// render it
 	fmt.Printf("Table with customizations:\n%s", tw.Render())
-
+	
 	// Output: Table with customizations:
 	// ┌──────────────────────────────────────────────────────────────────────┐
 	// │    first name  last name  salary                                     │

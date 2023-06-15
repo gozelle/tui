@@ -1,5 +1,5 @@
 # Table
-[![Go Reference](https://pkg.go.dev/badge/github.com/jedib0t/go-pretty/v6/table.svg)](https://pkg.go.dev/github.com/jedib0t/go-pretty/v6/table)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gozelle/tui/v6/table.svg)](https://pkg.go.dev/github.com/gozelle/tui/v6/table)
 
 Pretty-print tables into ASCII/Unicode strings.
 
@@ -58,7 +58,7 @@ If you want very specific examples, read ahead.
 
 **Hint**: I've tried to ensure that almost all supported use-cases are covered
 by unit-tests and that they print the table rendered. Run
-`go test -v github.com/jedib0t/go-pretty/v6/table` to see the test outputs and
+`go test -v github.com/gozelle/tui/v6/table` to see the test outputs and
 help you figure out how to do something.
 
 # Examples
@@ -72,7 +72,7 @@ package main
 import (
     "os"
 
-    "github.com/jedib0t/go-pretty/v6/table"
+    "github.com/gozelle/tui/v6/table"
 )
 
 func main() {

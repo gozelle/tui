@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-
-	"github.com/jedib0t/go-pretty/v6/progress"
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/progress"
+	"github.com/gozelle/tui/v6/text"
 )
 
 var (
@@ -24,7 +24,7 @@ var (
 	flagShowPinned         = flag.Bool("show-pinned", false, "Show a pinned message?")
 	flagRandomFail         = flag.Bool("rnd-fail", false, "Introduce random failures in tracking")
 	flagRandomLogs         = flag.Bool("rnd-logs", false, "Output random logs in the middle of tracking")
-
+	
 	messageColors = []text.Color{
 		text.FgRed,
 		text.FgGreen,
@@ -68,16 +68,16 @@ func getUnits(idx int64) *progress.Units {
 func trackSomething(pw progress.Writer, idx int64, updateMessage bool) {
 	total := idx * idx * idx * 250
 	incrementPerCycle := idx * int64(*flagNumTrackers) * 250
-
+	
 	units := getUnits(idx)
 	message := getMessage(idx, units)
 	tracker := progress.Tracker{Message: message, Total: total, Units: *units}
 	if idx == int64(*flagNumTrackers) {
 		tracker.Total = 0
 	}
-
+	
 	pw.AppendTracker(&tracker)
-
+	
 	ticker := time.Tick(time.Millisecond * 500)
 	updateTicker := time.Tick(time.Millisecond * 250)
 	for !tracker.IsDone() {
@@ -108,7 +108,7 @@ func trackSomething(pw progress.Writer, idx int64, updateMessage bool) {
 func main() {
 	flag.Parse()
 	fmt.Printf("Tracking Progress of %d trackers ...\n\n", *flagNumTrackers)
-
+	
 	// instantiate a Progress Writer and set up the options
 	pw := progress.NewWriter()
 	pw.SetAutoStop(*flagAutoStop)
@@ -130,16 +130,16 @@ func main() {
 	pw.Style().Visibility.TrackerOverall = !*flagHideOverallTracker
 	pw.Style().Visibility.Value = !*flagHideValue
 	pw.Style().Visibility.Pinned = *flagShowPinned
-
+	
 	// call Render() in async mode; yes we don't have any trackers at the moment
 	go pw.Render()
-
+	
 	// add a bunch of trackers with random parameters to demo most of the
 	// features available; do this in async too like a client might do (for ex.
 	// when downloading a bunch of files in parallel)
 	for idx := int64(1); idx <= int64(*flagNumTrackers); idx++ {
 		go trackSomething(pw, idx, idx == int64(*flagNumTrackers))
-
+		
 		// in auto-stop mode, the Render logic terminates the moment it detects
 		// zero active trackers; but in a manual-stop mode, it keeps waiting and
 		// is a good chance to demo trackers being added dynamically while other
@@ -148,7 +148,7 @@ func main() {
 			time.Sleep(time.Millisecond * 100)
 		}
 	}
-
+	
 	// wait for one or more trackers to become active (just blind-wait for a
 	// second) and then keep watching until Rendering is in progress
 	time.Sleep(time.Second)
@@ -161,13 +161,13 @@ func main() {
 				messagesLogged[logMsg] = true
 			}
 		}
-
+		
 		// for manual-stop mode, stop when there are no more active trackers
 		if !*flagAutoStop && pw.LengthActive() == 0 {
 			pw.Stop()
 		}
 		time.Sleep(time.Millisecond * 100)
 	}
-
+	
 	fmt.Println("\nAll done!")
 }

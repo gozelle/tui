@@ -5,8 +5,8 @@ import (
 	"math"
 	"strings"
 	"time"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 // Render renders the Progress tracker and handles all existing trackers and
@@ -14,7 +14,7 @@ import (
 func (p *Progress) Render() {
 	if p.beginRender() {
 		p.initForRender()
-
+		
 		lastRenderLength := 0
 		ticker := time.NewTicker(p.updateFrequency)
 		defer ticker.Stop()
@@ -36,7 +36,7 @@ func (p *Progress) Render() {
 func (p *Progress) beginRender() bool {
 	p.renderInProgressMutex.Lock()
 	defer p.renderInProgressMutex.Unlock()
-
+	
 	if p.renderInProgress {
 		return false
 	}
@@ -58,14 +58,14 @@ func (p *Progress) consumeQueuedTrackers() {
 func (p *Progress) endRender() {
 	p.renderInProgressMutex.Lock()
 	defer p.renderInProgressMutex.Unlock()
-
+	
 	p.renderInProgress = false
 }
 
 func (p *Progress) extractDoneAndActiveTrackers() ([]*Tracker, []*Tracker) {
 	// move trackers waiting in queue to the active list
 	p.consumeQueuedTrackers()
-
+	
 	// separate the active and done trackers
 	var trackersActive, trackersDone []*Tracker
 	var activeTrackersProgress int64
@@ -81,7 +81,7 @@ func (p *Progress) extractDoneAndActiveTrackers() ([]*Tracker, []*Tracker) {
 	p.trackersActiveMutex.RUnlock()
 	p.sortBy.Sort(trackersDone)
 	p.sortBy.Sort(trackersActive)
-
+	
 	// calculate the overall tracker's progress value
 	p.overallTracker.value = int64(p.LengthDone()+len(trackersDone)) * 100
 	p.overallTracker.value += activeTrackersProgress
@@ -109,7 +109,7 @@ func (p *Progress) generateTrackerStrDeterminate(value int64, total int64, maxLe
 		pFinishedDotsFraction = pFinishedDots - float64(int(pFinishedDots))
 	}
 	pFinishedLen := int(math.Floor(pFinishedDots))
-
+	
 	var pFinished, pInProgress, pUnfinished string
 	if pFinishedLen > 0 {
 		pFinished = strings.Repeat(p.style.Chars.Finished, pFinishedLen)
@@ -128,7 +128,7 @@ func (p *Progress) generateTrackerStrDeterminate(value int64, total int64, maxLe
 	if pFinishedStrLen < maxLen {
 		pUnfinished = strings.Repeat(p.style.Chars.Unfinished, maxLen-pFinishedStrLen)
 	}
-
+	
 	return p.style.Colors.Tracker.Sprintf("%s%s%s%s%s",
 		p.style.Chars.BoxLeft, pFinished, pInProgress, pUnfinished, p.style.Chars.BoxRight,
 	)
@@ -138,7 +138,7 @@ func (p *Progress) generateTrackerStrDeterminate(value int64, total int64, maxLe
 // the Total value is unknown, and the progress percentage cannot be calculated.
 func (p *Progress) generateTrackerStrIndeterminate(maxLen int) string {
 	indicator := p.style.Chars.Indeterminate(maxLen)
-
+	
 	pUnfinished := ""
 	if indicator.Position > 0 {
 		pUnfinished += strings.Repeat(p.style.Chars.Unfinished, indicator.Position)
@@ -147,7 +147,7 @@ func (p *Progress) generateTrackerStrIndeterminate(maxLen int) string {
 	if text.RuneWidthWithoutEscSequences(pUnfinished) < maxLen {
 		pUnfinished += strings.Repeat(p.style.Chars.Unfinished, maxLen-text.RuneWidthWithoutEscSequences(pUnfinished))
 	}
-
+	
 	return p.style.Colors.Tracker.Sprintf("%s%s%s",
 		p.style.Chars.BoxLeft, string(pUnfinished), p.style.Chars.BoxRight,
 	)
@@ -171,13 +171,13 @@ func (p *Progress) moveCursorToTheTop(out *strings.Builder) {
 func (p *Progress) renderPinnedMessages(out *strings.Builder) {
 	p.pinnedMessageMutex.RLock()
 	defer p.pinnedMessageMutex.RUnlock()
-
+	
 	numLines := len(p.pinnedMessages)
 	for _, msg := range p.pinnedMessages {
 		msg = strings.TrimSpace(msg)
 		out.WriteString(p.style.Colors.Pinned.Sprint(msg))
 		out.WriteRune('\n')
-
+		
 		numLines += strings.Count(msg, "\n")
 	}
 	p.pinnedMessageNumLines = numLines
@@ -199,7 +199,7 @@ func (p *Progress) renderTracker(out *strings.Builder, t *Tracker, hint renderHi
 			message = text.Snip(message, p.messageWidth, p.style.Options.SnipIndicator)
 		}
 	}
-
+	
 	if hint.isOverallTracker {
 		if !t.IsDone() {
 			hint := renderHint{hideValue: true, isOverallTracker: true}
@@ -277,39 +277,39 @@ func (p *Progress) renderTrackers(lastRenderLength int) int {
 	if p.LengthActive() == 0 {
 		return 0
 	}
-
+	
 	// buffer all output into a strings.Builder object
 	var out strings.Builder
 	out.Grow(lastRenderLength)
-
+	
 	// move up N times based on the number of active trackers
 	if lastRenderLength > 0 {
 		p.moveCursorToTheTop(&out)
 	}
-
+	
 	// render the trackers that are done, and then the ones that are active
 	p.renderTrackersDoneAndActive(&out)
-
+	
 	// render the overall tracker
 	if p.style.Visibility.TrackerOverall {
 		p.renderTracker(&out, p.overallTracker, renderHint{isOverallTracker: true})
 	}
-
+	
 	// write the text to the output writer
 	_, _ = p.outputWriter.Write([]byte(out.String()))
-
+	
 	// stop if auto stop is enabled and there are no more active trackers
 	if p.autoStop && p.LengthActive() == 0 {
 		p.done <- true
 	}
-
+	
 	return out.Len()
 }
 
 func (p *Progress) renderTrackersDoneAndActive(out *strings.Builder) {
 	// find the currently "active" and "done" trackers
 	trackersActive, trackersDone := p.extractDoneAndActiveTrackers()
-
+	
 	// sort and render the done trackers
 	for _, tracker := range trackersDone {
 		p.renderTracker(out, tracker, renderHint{})
@@ -317,7 +317,7 @@ func (p *Progress) renderTrackersDoneAndActive(out *strings.Builder) {
 	p.trackersDoneMutex.Lock()
 	p.trackersDone = append(p.trackersDone, trackersDone...)
 	p.trackersDoneMutex.Unlock()
-
+	
 	// render all the logs received and flush them out
 	p.logsToRenderMutex.Lock()
 	for _, log := range p.logsToRender {
@@ -327,12 +327,12 @@ func (p *Progress) renderTrackersDoneAndActive(out *strings.Builder) {
 	}
 	p.logsToRender = nil
 	p.logsToRenderMutex.Unlock()
-
+	
 	// render pinned messages
 	if len(trackersActive) > 0 && p.style.Visibility.Pinned {
 		p.renderPinnedMessages(out)
 	}
-
+	
 	// sort and render the active trackers
 	for _, tracker := range trackersActive {
 		p.renderTracker(out, tracker, renderHint{})
@@ -346,7 +346,7 @@ func (p *Progress) renderTrackerStats(out *strings.Builder, t *Tracker, hint ren
 	if !hint.hideValue || !hint.hideTime {
 		var outStats strings.Builder
 		outStats.WriteString(" [")
-
+		
 		if p.style.Options.SpeedPosition == PositionLeft {
 			p.renderTrackerStatsSpeed(&outStats, t, hint)
 		}
@@ -363,7 +363,7 @@ func (p *Progress) renderTrackerStats(out *strings.Builder, t *Tracker, hint ren
 			p.renderTrackerStatsSpeed(&outStats, t, hint)
 		}
 		outStats.WriteRune(']')
-
+		
 		out.WriteString(p.style.Colors.Stats.Sprint(outStats.String()))
 	}
 }
@@ -375,17 +375,17 @@ func (p *Progress) renderTrackerStatsSpeed(out *strings.Builder, t *Tracker, hin
 	if !hint.isOverallTracker && !p.style.Visibility.Speed {
 		return
 	}
-
+	
 	speedPrecision := p.style.Options.SpeedPrecision
 	if hint.isOverallTracker {
 		speed := float64(0)
-
+		
 		p.trackersActiveMutex.RLock()
 		for _, tracker := range p.trackersActive {
 			speed += float64(tracker.Value()) / time.Since(tracker.timeStart).Round(speedPrecision).Seconds()
 		}
 		p.trackersActiveMutex.RUnlock()
-
+		
 		if speed > 0 {
 			p.renderTrackerStatsSpeedInternal(out, p.style.Options.SpeedOverallFormatter(int64(speed)))
 		}
@@ -423,7 +423,7 @@ func (p *Progress) renderTrackerStatsTime(outStats *strings.Builder, t *Tracker,
 		tp = p.style.Options.TimeInProgressPrecision
 	}
 	outStats.WriteString(p.style.Colors.Time.Sprint(td.Round(tp)))
-
+	
 	p.renderTrackerStatsETA(outStats, t, hint)
 }
 
@@ -434,7 +434,7 @@ func (p *Progress) renderTrackerStatsETA(out *strings.Builder, t *Tracker, hint 
 	if !hint.isOverallTracker && !p.style.Visibility.ETA {
 		return
 	}
-
+	
 	tpETA := p.style.Options.ETAPrecision
 	if eta := t.ETA().Round(tpETA); hint.isOverallTracker || eta > tpETA {
 		out.WriteString("; ")

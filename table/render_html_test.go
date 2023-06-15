@@ -3,8 +3,8 @@ package table
 import (
 	"fmt"
 	"testing"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -25,7 +25,7 @@ func TestTable_RenderHTML(t *testing.T) {
 		Colors: text.Colors{text.BgBlack, text.Bold, text.FgHiBlue},
 		Format: text.FormatTitle,
 	}
-
+	
 	compareOutput(t, tw.RenderHTML(), `
 <table class="go-pretty-table">
   <caption class="title" align="left" class="bg-black bold fg-hi-blue">Game Of Thrones</caption>
@@ -100,7 +100,7 @@ func TestTable_RenderHTML_AutoIndex(t *testing.T) {
 	tw.SetOutputMirror(nil)
 	tw.SetAutoIndex(true)
 	tw.SetStyle(StyleLight)
-
+	
 	compareOutput(t, tw.RenderHTML(), `
 <table class="go-pretty-table">
   <thead>
@@ -179,7 +179,7 @@ func TestTable_RenderHTML_Colored(t *testing.T) {
 			VAlign:       text.VAlignBottom,
 		},
 	})
-
+	
 	compareOutput(t, tw.RenderHTML(), `
 <table class="go-pretty-table-colored">
   <caption class="title">Game of Thrones</caption>
@@ -250,7 +250,7 @@ func TestTable_RenderHTML_CustomStyle(t *testing.T) {
 		Newline:     "<!-- newline -->",
 	}
 	tw.SetOutputMirror(nil)
-
+	
 	compareOutput(t, tw.RenderHTML(), `
 <table class="game-of-thrones">
   <thead>
@@ -312,21 +312,21 @@ func TestTable_RenderHTML_HiddenColumns(t *testing.T) {
 	tw.AppendHeader(testHeader)
 	tw.AppendRows(testRows)
 	tw.AppendFooter(testFooter)
-
+	
 	// ensure sorting is done before hiding the columns
 	tw.SortBy([]SortBy{
 		{Name: "Salary", Mode: DscNumeric},
 	})
-
+	
 	t.Run("every column hidden", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{0, 1, 2, 3, 4}))
-
+		
 		compareOutput(t, tw.RenderHTML(), "")
 	})
-
+	
 	t.Run("first column hidden", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{0}))
-
+		
 		compareOutput(t, tw.RenderHTML(), `
 <table class="go-pretty-table">
   <thead>
@@ -367,10 +367,10 @@ func TestTable_RenderHTML_HiddenColumns(t *testing.T) {
   </tfoot>
 </table>`)
 	})
-
+	
 	t.Run("column hidden in the middle", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{1}))
-
+		
 		compareOutput(t, tw.RenderHTML(), `
 <table class="go-pretty-table">
   <thead>
@@ -411,10 +411,10 @@ func TestTable_RenderHTML_HiddenColumns(t *testing.T) {
   </tfoot>
 </table>`)
 	})
-
+	
 	t.Run("last column hidden", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{4}))
-
+		
 		compareOutput(t, tw.RenderHTML(), `
 <table class="go-pretty-table">
   <thead>
@@ -464,7 +464,7 @@ func TestTable_RenderHTML_Sorted(t *testing.T) {
 	tw.AppendRow(Row{11, "Sansa", "Stark", 6000})
 	tw.AppendFooter(testFooter)
 	tw.SortBy([]SortBy{{Name: "Last Name", Mode: Asc}, {Name: "First Name", Mode: Asc}})
-
+	
 	compareOutput(t, tw.RenderHTML(), `
 <table class="go-pretty-table">
   <thead>

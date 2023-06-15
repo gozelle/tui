@@ -2,8 +2,8 @@ package table
 
 import (
 	"testing"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 func TestTable_Render_BiDiText(t *testing.T) {
@@ -14,7 +14,7 @@ func TestTable_Render_BiDiText(t *testing.T) {
 	table.AppendRow(Row{"2022-03-01", 5.0, "מחלקה2", []string{"תג1"}})
 	table.AppendFooter(Row{"סהכ", 30})
 	table.SetAutoIndex(true)
-
+	
 	//table.Style().Format.Direction = text.Default
 	compareOutput(t, table.Render(), `
 +---+------------+------+--------+-----------+
@@ -26,7 +26,7 @@ func TestTable_Render_BiDiText(t *testing.T) {
 +---+------------+------+--------+-----------+
 |   | סהכ        |   30 |        |           |
 +---+------------+------+--------+-----------+`)
-
+	
 	table.Style().Format.Direction = text.LeftToRight
 	compareOutput(t, table.Render(), `
 ‪+---+------------+------+--------+-----------+
@@ -38,7 +38,7 @@ func TestTable_Render_BiDiText(t *testing.T) {
 ‪+---+------------+------+--------+-----------+
 ‪|   | ‪סהכ        |   ‪30 |        |           |
 ‪+---+------------+------+--------+-----------+`)
-
+	
 	table.Style().Format.Direction = text.RightToLeft
 	compareOutput(t, table.Render(), `
 ‫+---+------------+------+--------+-----------+

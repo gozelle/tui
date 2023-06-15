@@ -1,5 +1,5 @@
 ## List
-[![Go Reference](https://pkg.go.dev/badge/github.com/jedib0t/go-pretty/v6/list.svg)](https://pkg.go.dev/github.com/jedib0t/go-pretty/v6/list)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gozelle/tui/v6/list.svg)](https://pkg.go.dev/github.com/gozelle/tui/v6/list)
 
 Pretty-print lists with multiple levels/indents into ASCII/Unicode strings.
 

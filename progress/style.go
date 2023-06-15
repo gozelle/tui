@@ -2,8 +2,8 @@ package progress
 
 import (
 	"time"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 // Style declares how to render the Progress/Trackers.
@@ -24,7 +24,7 @@ var (
 		Options:    StyleOptionsDefault,
 		Visibility: StyleVisibilityDefault,
 	}
-
+	
 	// StyleBlocks uses UNICODE Block Drawing characters to render the Trackers.
 	StyleBlocks = Style{
 		Name:       "StyleBlocks",
@@ -33,7 +33,7 @@ var (
 		Options:    StyleOptionsDefault,
 		Visibility: StyleVisibilityDefault,
 	}
-
+	
 	// StyleCircle uses UNICODE Circle runes to render the Trackers.
 	StyleCircle = Style{
 		Name:       "StyleCircle",
@@ -42,7 +42,7 @@ var (
 		Options:    StyleOptionsDefault,
 		Visibility: StyleVisibilityDefault,
 	}
-
+	
 	// StyleRhombus uses UNICODE Rhombus runes to render the Trackers.
 	StyleRhombus = Style{
 		Name:       "StyleRhombus",
@@ -77,7 +77,7 @@ var (
 		Indeterminate: IndeterminateIndicatorMovingBackAndForth("<#>", DefaultUpdateFrequency/2),
 		Unfinished:    ".",
 	}
-
+	
 	// StyleCharsBlocks uses UNICODE Block Drawing characters.
 	StyleCharsBlocks = StyleChars{
 		BoxLeft:       "║",
@@ -89,7 +89,7 @@ var (
 		Indeterminate: IndeterminateIndicatorMovingBackAndForth("▒█▒", DefaultUpdateFrequency/2),
 		Unfinished:    "░",
 	}
-
+	
 	// StyleCharsCircle uses UNICODE Circle characters.
 	StyleCharsCircle = StyleChars{
 		BoxLeft:       "(",
@@ -101,7 +101,7 @@ var (
 		Indeterminate: IndeterminateIndicatorMovingBackAndForth("○●○", DefaultUpdateFrequency/2),
 		Unfinished:    "◌",
 	}
-
+	
 	// StyleCharsRhombus uses UNICODE Rhombus characters.
 	StyleCharsRhombus = StyleChars{
 		BoxLeft:       "<",
@@ -132,7 +132,7 @@ type StyleColors struct {
 var (
 	// StyleColorsDefault defines sane color choices - None.
 	StyleColorsDefault = StyleColors{}
-
+	
 	// StyleColorsExample defines a few choice color options. Use this is just
 	// as an example to customize the Tracker/text colors.
 	StyleColorsExample = StyleColors{

@@ -1,9 +1,9 @@
 # go-pretty
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/jedib0t/go-pretty/v6.svg)](https://pkg.go.dev/github.com/jedib0t/go-pretty/v6)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gozelle/tui/v6.svg)](https://pkg.go.dev/github.com/gozelle/tui/v6)
 [![Build Status](https://github.com/jedib0t/go-pretty/workflows/CI/badge.svg?branch=main)](https://github.com/jedib0t/go-pretty/actions?query=workflow%3ACI+event%3Apush+branch%3Amain)
 [![Coverage Status](https://coveralls.io/repos/github/jedib0t/go-pretty/badge.svg?branch=main)](https://coveralls.io/github/jedib0t/go-pretty?branch=main)
-[![Go Report Card](https://goreportcard.com/badge/github.com/jedib0t/go-pretty/v6)](https://goreportcard.com/report/github.com/jedib0t/go-pretty/v6)
+[![Go Report Card](https://goreportcard.com/badge/github.com/gozelle/tui/v6)](https://goreportcard.com/report/github.com/gozelle/tui/v6)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jedib0t_go-pretty&metric=alert_status)](https://sonarcloud.io/dashboard?id=jedib0t_go-pretty)
 
 Utilities to prettify console output of tables, lists, progress-bars, text, etc.
@@ -14,12 +14,12 @@ with a heavy emphasis on customization.
 The current major version of this package is __v6__, and it follows the standard
 outlined [here](https://go.dev/doc/modules/version-numbers#major-version).
 
-Run `go get github.com/jedib0t/go-pretty/v6` to add this as a dependency to your
+Run `go get github.com/gozelle/tui/v6` to add this as a dependency to your
 project, and import the packages in your code using one or more of these:
-* `github.com/jedib0t/go-pretty/v6/list`
-* `github.com/jedib0t/go-pretty/v6/progress`
-* `github.com/jedib0t/go-pretty/v6/table`
-* `github.com/jedib0t/go-pretty/v6/text`
+* `github.com/gozelle/tui/v6/list`
+* `github.com/gozelle/tui/v6/progress`
+* `github.com/gozelle/tui/v6/table`
+* `github.com/gozelle/tui/v6/text`
 
 ## Table
 
@@ -37,7 +37,7 @@ Pretty-print tables in a terminal with colors, nested tables and more.
 +-----+------------+-----------+--------+-----------------------------+
 ```
 
-Execute `go run github.com/jedib0t/go-pretty/v6/cmd/demo-table@latest colors` to get:
+Execute `go run github.com/gozelle/tui/v6/cmd/demo-table@latest colors` to get:
 
 <img src="cmd/demo-table/demo-colors.png" alt="Tables with Colors within a Table in a Terminal"/>
 
@@ -98,10 +98,10 @@ something like:
 ```
 to:
 ```golang
-    "github.com/jedib0t/go-pretty/v6/list"
-    "github.com/jedib0t/go-pretty/v6/progress"
-    "github.com/jedib0t/go-pretty/v6/table"
-    "github.com/jedib0t/go-pretty/v6/text"
+    "github.com/gozelle/tui/v6/list"
+    "github.com/gozelle/tui/v6/progress"
+    "github.com/gozelle/tui/v6/table"
+    "github.com/gozelle/tui/v6/text"
 ```
 
 I'd recommend you fire up your favorite IDE and do a mass search and replace for

@@ -3,8 +3,8 @@ package progress
 import (
 	"strings"
 	"time"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 // IndeterminateIndicator defines the structure for the indicator to indicate
@@ -59,7 +59,7 @@ func IndeterminateIndicatorPacMan(duration time.Duration) IndeterminateIndicator
 func indeterminateIndicatorDominoes() IndeterminateIndicatorGenerator {
 	direction := 1 // positive == left to right; negative == right to left
 	nextPosition := 0
-
+	
 	out := strings.Builder{}
 	generateIndicator := func(currentPosition int, maxLen int) string {
 		out.Reset()
@@ -67,17 +67,17 @@ func indeterminateIndicatorDominoes() IndeterminateIndicatorGenerator {
 		out.WriteString(strings.Repeat("\\", maxLen-currentPosition))
 		return out.String()
 	}
-
+	
 	return func(maxLen int) IndeterminateIndicator {
 		currentPosition := nextPosition
-
+		
 		if currentPosition == 0 {
 			direction = 1
 		} else if currentPosition == maxLen {
 			direction = -1
 		}
 		nextPosition += direction
-
+		
 		return IndeterminateIndicator{
 			Position: 0,
 			Text:     generateIndicator(currentPosition, maxLen),
@@ -88,17 +88,17 @@ func indeterminateIndicatorDominoes() IndeterminateIndicatorGenerator {
 func indeterminateIndicatorMovingBackAndForth(indicator string) IndeterminateIndicatorGenerator {
 	direction := 1 // positive == left to right; negative == right to left
 	nextPosition := 0
-
+	
 	return func(maxLen int) IndeterminateIndicator {
 		currentPosition := nextPosition
-
+		
 		if currentPosition == 0 {
 			direction = 1
 		} else if currentPosition+text.RuneWidthWithoutEscSequences(indicator) == maxLen {
 			direction = -1
 		}
 		nextPosition += direction
-
+		
 		return IndeterminateIndicator{
 			Position: currentPosition,
 			Text:     indicator,
@@ -108,15 +108,15 @@ func indeterminateIndicatorMovingBackAndForth(indicator string) IndeterminateInd
 
 func indeterminateIndicatorMovingLeftToRight(indicator string) IndeterminateIndicatorGenerator {
 	nextPosition := 0
-
+	
 	return func(maxLen int) IndeterminateIndicator {
 		currentPosition := nextPosition
-
+		
 		nextPosition++
 		if nextPosition+text.RuneWidthWithoutEscSequences(indicator) > maxLen {
 			nextPosition = 0
 		}
-
+		
 		return IndeterminateIndicator{
 			Position: currentPosition,
 			Text:     indicator,
@@ -126,14 +126,14 @@ func indeterminateIndicatorMovingLeftToRight(indicator string) IndeterminateIndi
 
 func indeterminateIndicatorMovingRightToLeft(indicator string) IndeterminateIndicatorGenerator {
 	nextPosition := -1
-
+	
 	return func(maxLen int) IndeterminateIndicator {
 		if nextPosition == -1 {
 			nextPosition = maxLen - text.RuneWidthWithoutEscSequences(indicator)
 		}
 		currentPosition := nextPosition
 		nextPosition--
-
+		
 		return IndeterminateIndicator{
 			Position: currentPosition,
 			Text:     indicator,
@@ -146,7 +146,7 @@ func indeterminateIndicatorPacMan() IndeterminateIndicatorGenerator {
 	direction := 1 // positive == left to right; negative == right to left
 	indicator := pacManMovingRight
 	nextPosition := 0
-
+	
 	out := strings.Builder{}
 	generateIndicator := func(currentPosition int, maxLen int) string {
 		out.Reset()
@@ -157,11 +157,11 @@ func indeterminateIndicatorPacMan() IndeterminateIndicatorGenerator {
 		out.WriteString(strings.Repeat(" ", maxLen-currentPosition-1))
 		return out.String()
 	}
-
+	
 	return func(maxLen int) IndeterminateIndicator {
 		currentPosition := nextPosition
 		currentText := generateIndicator(currentPosition, maxLen)
-
+		
 		if currentPosition == 0 {
 			direction = 1
 			indicator = pacManMovingRight
@@ -170,7 +170,7 @@ func indeterminateIndicatorPacMan() IndeterminateIndicatorGenerator {
 			indicator = pacManMovingLeft
 		}
 		nextPosition += direction
-
+		
 		return IndeterminateIndicator{
 			Position: 0,
 			Text:     currentText,
@@ -183,7 +183,7 @@ func indeterminateIndicatorPacMan() IndeterminateIndicatorGenerator {
 func timedIndeterminateIndicatorGenerator(indicatorGenerator IndeterminateIndicatorGenerator, duration time.Duration) IndeterminateIndicatorGenerator {
 	var indeterminateIndicator *IndeterminateIndicator
 	lastRenderTime := time.Now()
-
+	
 	return func(maxLen int) IndeterminateIndicator {
 		currRenderTime := time.Now()
 		if indeterminateIndicator == nil || duration == 0 || currRenderTime.Sub(lastRenderTime) > duration {
@@ -191,7 +191,7 @@ func timedIndeterminateIndicatorGenerator(indicatorGenerator IndeterminateIndica
 			indeterminateIndicator = &tmpIndeterminateIndicator
 			lastRenderTime = currRenderTime
 		}
-
+		
 		return *indeterminateIndicator
 	}
 }

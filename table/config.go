@@ -1,7 +1,7 @@
 package table
 
 import (
-	"github.com/jedib0t/go-pretty/v6/text"
+	"github.com/gozelle/tui/v6/text"
 )
 
 // ColumnConfig contains configurations that determine and modify the way the
@@ -14,14 +14,14 @@ type ColumnConfig struct {
 	// Number is the Column # from left. When specified, it overrides the Name
 	// property. If you know the exact Column number, use this instead of Name.
 	Number int
-
+	
 	// Align defines the horizontal alignment
 	Align text.Align
 	// AlignFooter defines the horizontal alignment of Footer rows
 	AlignFooter text.Align
 	// AlignHeader defines the horizontal alignment of Header rows
 	AlignHeader text.Align
-
+	
 	// AutoMerge merges cells with similar values and prevents separators from
 	// being drawn. Caveats:
 	// * VAlign is applied on the individual cell and not on the merged cell
@@ -32,19 +32,19 @@ type ColumnConfig struct {
 	// * Style().Options.SeparateRows == true
 	// * Style().Color.Row == Style().Color.RowAlternate (or not set)
 	AutoMerge bool
-
+	
 	// Colors defines the colors to be used on the column
 	Colors text.Colors
 	// ColorsFooter defines the colors to be used on the column in Footer rows
 	ColorsFooter text.Colors
 	// ColorsHeader defines the colors to be used on the column in Header rows
 	ColorsHeader text.Colors
-
+	
 	// Hidden when set to true will prevent the column from being rendered.
 	// This is useful in cases like needing a column for sorting, but not for
 	// display.
 	Hidden bool
-
+	
 	// Transformer is a custom-function that changes the way the value gets
 	// rendered to the console. Refer to text/transformer.go for ready-to-use
 	// Transformer functions.
@@ -53,14 +53,14 @@ type ColumnConfig struct {
 	TransformerFooter text.Transformer
 	// TransformerHeader is like Transformer but for Header rows
 	TransformerHeader text.Transformer
-
+	
 	// VAlign defines the vertical alignment
 	VAlign text.VAlign
 	// VAlignFooter defines the vertical alignment in Footer rows
 	VAlignFooter text.VAlign
 	// VAlignHeader defines the vertical alignment in Header rows
 	VAlignHeader text.VAlign
-
+	
 	// WidthMax defines the maximum character length of the column
 	WidthMax int
 	// WidthEnforcer enforces the WidthMax value on the column contents;
@@ -90,7 +90,7 @@ type RowConfig struct {
 	// * Does not work in CSV/HTML/Markdown render modes
 	// * Does not work well with vertical auto-merge (ColumnConfig.AutoMerge)
 	AutoMerge bool
-
+	
 	// Alignment to use on a merge (defaults to text.AlignCenter)
 	AutoMergeAlign text.Align
 }

@@ -6,8 +6,8 @@ import (
 	"os"
 	"strconv"
 	"time"
-
-	"github.com/jedib0t/go-pretty/v6/progress"
+	
+	"github.com/gozelle/tui/v6/progress"
 	"github.com/pkg/profile"
 )
 
@@ -23,7 +23,7 @@ var (
 
 func profileRender(profiler func(profile2 *profile.Profile), n int) {
 	defer profile.Start(profiler, profile.ProfilePath("./")).Stop()
-
+	
 	trackSomething := func(pw progress.Writer, tracker *progress.Tracker) {
 		tracker.Reset()
 		pw.AppendTracker(tracker)
@@ -32,7 +32,7 @@ func profileRender(profiler func(profile2 *profile.Profile), n int) {
 		time.Sleep(time.Millisecond * 100)
 		tracker.Increment(tracker.Total / 2)
 	}
-
+	
 	for i := 0; i < n; i++ {
 		pw := progress.NewWriter()
 		pw.SetAutoStop(true)
@@ -55,7 +55,7 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
+	
 	for _, profiler := range profilers {
 		profileRender(profiler, numRenders)
 	}

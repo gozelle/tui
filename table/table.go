@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"strings"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 // Row defines a single row in the Table.
@@ -455,7 +455,7 @@ func (t *Table) getColumnSeparatorNonBorder(mergeCellsAbove bool, mergeCellsBelo
 	if hint.isAutoIndexColumn {
 		return t.getColumnSeparatorNonBorderAutoIndex(mergeNextCol, hint)
 	}
-
+	
 	mergeCurrCol := t.shouldMergeCellsVertically(colIdx-1, hint)
 	return t.getColumnSeparatorNonBorderNonAutoIndex(mergeCellsAbove, mergeCellsBelow, mergeCurrCol, mergeNextCol)
 }
@@ -545,7 +545,7 @@ func (t *Table) getMergedColumnIndices(row rowStr, hint renderHint) mergedColumn
 	if !t.getRowConfig(hint).AutoMerge {
 		return nil
 	}
-
+	
 	mci := make(mergedColumnIndices)
 	for colIdx := 0; colIdx < t.numColumns-1; colIdx++ {
 		// look backward
@@ -589,7 +589,7 @@ func (t *Table) getRowConfig(hint renderHint) RowConfig {
 	if rowIdx < 0 {
 		rowIdx = 0
 	}
-
+	
 	switch {
 	case hint.isHeaderRow:
 		return t.rowsHeaderConfigMap[rowIdx]
@@ -663,15 +663,15 @@ func (t *Table) hideColumns() map[int]int {
 		}
 		return rsp
 	}
-
+	
 	// hide columns as directed
 	t.rows = hideColumnsInRows(t.rows)
 	t.rowsFooter = hideColumnsInRows(t.rowsFooter)
 	t.rowsHeader = hideColumnsInRows(t.rowsHeader)
-
+	
 	// reset numColumns to the new number of columns
 	t.numColumns = numColumns
-
+	
 	return colIdxMap
 }
 
@@ -692,7 +692,7 @@ func (t *Table) shouldMergeCellsHorizontallyAbove(row rowStr, colIdx int, hint r
 	if hint.isAutoIndexColumn || hint.isAutoIndexRow {
 		return false
 	}
-
+	
 	rowConfig := t.getRowConfig(hint)
 	if hint.isSeparatorRow {
 		if hint.isHeaderRow && hint.rowNumber == 1 {
@@ -707,7 +707,7 @@ func (t *Table) shouldMergeCellsHorizontallyAbove(row rowStr, colIdx int, hint r
 			row = t.getRow(hint.rowNumber-1, hint)
 		}
 	}
-
+	
 	if rowConfig.AutoMerge {
 		return row.areEqual(colIdx-1, colIdx)
 	}
@@ -718,7 +718,7 @@ func (t *Table) shouldMergeCellsHorizontallyBelow(row rowStr, colIdx int, hint r
 	if hint.isAutoIndexColumn || hint.isAutoIndexRow {
 		return false
 	}
-
+	
 	var rowConfig RowConfig
 	if hint.isSeparatorRow {
 		if hint.isHeaderRow && hint.rowNumber == 0 {
@@ -738,7 +738,7 @@ func (t *Table) shouldMergeCellsHorizontallyBelow(row rowStr, colIdx int, hint r
 			row = t.getRow(hint.rowNumber, renderHint{})
 		}
 	}
-
+	
 	if rowConfig.AutoMerge {
 		return row.areEqual(colIdx-1, colIdx)
 	}

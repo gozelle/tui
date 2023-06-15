@@ -1,6 +1,6 @@
 package list
 
-import "github.com/jedib0t/go-pretty/v6/text"
+import "github.com/gozelle/tui/v6/text"
 
 // Style declares how to render the List (items).
 type Style struct {
@@ -39,7 +39,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleDefault",
 	}
-
+	
 	// StyleBulletCircle renders a List like below:
 	//  ● Game Of Thrones
 	//    ● Winter
@@ -62,7 +62,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleBulletCircle",
 	}
-
+	
 	// StyleBulletFlower renders a List like below:
 	//  ✽ Game Of Thrones
 	//    ✽ Winter
@@ -85,7 +85,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleBulletFlower",
 	}
-
+	
 	// StyleBulletSquare renders a List like below:
 	//  ■ Game Of Thrones
 	//    ■ Winter
@@ -108,7 +108,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleBulletSquare",
 	}
-
+	
 	// StyleBulletStar renders a List like below:
 	//  ★ Game Of Thrones
 	//    ★ Winter
@@ -131,7 +131,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleBulletStar",
 	}
-
+	
 	// StyleBulletTriangle renders a List like below:
 	//  ▶ Game Of Thrones
 	//    ▶ Winter
@@ -154,7 +154,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleBulletTriangle",
 	}
-
+	
 	// StyleConnectedBold renders a List like below:
 	//  ┏━ Game Of Thrones
 	//  ┃  ┣━ Winter
@@ -177,7 +177,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleConnectedBold",
 	}
-
+	
 	// StyleConnectedDouble renders a List like below:
 	//  ╔═ Game Of Thrones
 	//  ║  ╠═ Winter
@@ -200,7 +200,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleConnectedDouble",
 	}
-
+	
 	// StyleConnectedLight renders a List like below:
 	//  ┌─ Game Of Thrones
 	//  │  ├─ Winter
@@ -223,7 +223,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleConnectedLight",
 	}
-
+	
 	// StyleConnectedRounded renders a List like below:
 	//  ╭─ Game Of Thrones
 	//  │  ├─ Winter
@@ -246,7 +246,7 @@ var (
 		LinePrefix:       "",
 		Name:             "StyleConnectedRounded",
 	}
-
+	
 	// StyleMarkdown renders a List like below:
 	//    * Game Of Thrones
 	//      * Winter
@@ -269,7 +269,7 @@ var (
 		LinePrefix:       "  ",
 		Name:             "StyleMarkdown",
 	}
-
+	
 	// styleTest renders a List like below:
 	//  t Game Of Thrones
 	//  |f Winter

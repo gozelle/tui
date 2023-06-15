@@ -1,5 +1,5 @@
 # Progress
-[![Go Reference](https://pkg.go.dev/badge/github.com/jedib0t/go-pretty/v6/progress.svg)](https://pkg.go.dev/github.com/jedib0t/go-pretty/v6/progress)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gozelle/tui/v6/progress.svg)](https://pkg.go.dev/github.com/gozelle/tui/v6/progress)
 
 Track the Progress of one or more Tasks (like downloading multiple files in
 parallel).

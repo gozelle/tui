@@ -7,14 +7,14 @@ import (
 	"sync"
 	"time"
 	"unicode/utf8"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 var (
 	// DefaultLengthTracker defines a sane value for a Tracker's length.
 	DefaultLengthTracker = 20
-
+	
 	// DefaultUpdateFrequency defines a sane value for the frequency with which
 	// all the Tracker's get updated on the screen.
 	DefaultUpdateFrequency = time.Millisecond * 250
@@ -58,7 +58,7 @@ type Position int
 const (
 	// PositionLeft will make the Tracker be displayed first before the Message.
 	PositionLeft Position = iota
-
+	
 	// PositionRight will make the Tracker be displayed after the Message.
 	PositionRight
 )
@@ -70,7 +70,7 @@ func (p *Progress) AppendTracker(t *Tracker) {
 	t.start()
 	p.overallTrackerMutex.Lock()
 	defer p.overallTrackerMutex.Unlock()
-
+	
 	if p.overallTracker == nil {
 		p.overallTracker = &Tracker{Total: 1}
 		if p.numTrackersExpected > 0 {
@@ -78,12 +78,12 @@ func (p *Progress) AppendTracker(t *Tracker) {
 		}
 		p.overallTracker.start()
 	}
-
+	
 	// append the tracker to the "in-queue" list
 	p.trackersInQueueMutex.Lock()
 	p.trackersInQueue = append(p.trackersInQueue, t)
 	p.trackersInQueueMutex.Unlock()
-
+	
 	// update the expected total progress since we are appending a new tracker
 	p.overallTracker.UpdateTotal(int64(p.Length()) * 100)
 }
@@ -100,7 +100,7 @@ func (p *Progress) AppendTrackers(trackers []*Tracker) {
 func (p *Progress) IsRenderInProgress() bool {
 	p.renderInProgressMutex.RLock()
 	defer p.renderInProgressMutex.RUnlock()
-
+	
 	return p.renderInProgress
 }
 
@@ -113,7 +113,7 @@ func (p *Progress) Length() int {
 	p.trackersInQueueMutex.RUnlock()
 	p.trackersDoneMutex.RUnlock()
 	p.trackersActiveMutex.RUnlock()
-
+	
 	return out
 }
 
@@ -124,7 +124,7 @@ func (p *Progress) LengthActive() int {
 	out := len(p.trackersInQueue) + len(p.trackersActive)
 	p.trackersInQueueMutex.RUnlock()
 	p.trackersActiveMutex.RUnlock()
-
+	
 	return out
 }
 
@@ -133,7 +133,7 @@ func (p *Progress) LengthDone() int {
 	p.trackersDoneMutex.RLock()
 	out := len(p.trackersDone)
 	p.trackersDoneMutex.RUnlock()
-
+	
 	return out
 }
 
@@ -143,7 +143,7 @@ func (p *Progress) LengthInQueue() int {
 	p.trackersInQueueMutex.RLock()
 	out := len(p.trackersInQueue)
 	p.trackersInQueueMutex.RUnlock()
-
+	
 	return out
 }
 
@@ -192,7 +192,7 @@ func (p *Progress) SetOutputWriter(writer io.Writer) {
 func (p *Progress) SetPinnedMessages(messages ...string) {
 	p.pinnedMessageMutex.Lock()
 	defer p.pinnedMessageMutex.Unlock()
-
+	
 	p.pinnedMessages = messages
 }
 
@@ -283,15 +283,15 @@ func (p *Progress) initForRender() {
 	if p.style.Options.SpeedOverallFormatter == nil {
 		p.style.Options.SpeedOverallFormatter = FormatNumber
 	}
-
+	
 	// reset the signals
 	p.done = make(chan bool, 1)
-
+	
 	// pick default lengths if no valid ones set
 	if p.lengthTracker <= 0 {
 		p.lengthTracker = DefaultLengthTracker
 	}
-
+	
 	// calculate length of the actual progress bar by discounting the left/right
 	// border/box chars
 	p.lengthProgress = p.lengthTracker -
@@ -303,12 +303,12 @@ func (p *Progress) initForRender() {
 	if p.style.Visibility.Percentage {
 		p.lengthProgressOverall += text.RuneWidthWithoutEscSequences(fmt.Sprintf(p.style.Options.PercentFormat, 0.0))
 	}
-
+	
 	// if not output write has been set, output to STDOUT
 	if p.outputWriter == nil {
 		p.outputWriter = os.Stdout
 	}
-
+	
 	// pick a sane update frequency if none set
 	if p.updateFrequency <= 0 {
 		p.updateFrequency = DefaultUpdateFrequency

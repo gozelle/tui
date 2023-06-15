@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 	"testing"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -29,7 +29,7 @@ func compareOutputColored(t *testing.T, out string, expectedOut string) {
 	assert.Equal(t, expectedOut, out)
 	if out != expectedOut {
 		fmt.Printf("Expected:\n%s\nActual:\n%s\n", expectedOut, out)
-
+		
 		// dump formatted output that can be "pasted" into the expectation in
 		// the test in case of valid changed behavior
 		outLines := strings.Split(out, "\n")
@@ -91,7 +91,7 @@ func TestTable_Render(t *testing.T) {
 	tw.SetCaption(testCaption)
 	tw.SetStyle(styleTest)
 	tw.SetTitle(testTitle2)
-
+	
 	compareOutput(t, tw.Render(), `
 (---------------------------------------------------------------------)
 [<When you play the Game of Thrones, you win or you die. There is no >]
@@ -122,7 +122,7 @@ func TestTable_Render_AutoIndex(t *testing.T) {
 	}
 	tw.SetAutoIndex(true)
 	tw.SetStyle(StyleLight)
-
+	
 	compareOutput(t, tw.Render(), `
 ┌────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┐
 │    │  A  │  B  │  C  │  D  │  E  │  F  │  G  │  H  │  I  │  J  │
@@ -142,7 +142,7 @@ func TestTable_Render_AutoIndex(t *testing.T) {
 
 func TestTable_Render_AutoMerge(t *testing.T) {
 	rcAutoMerge := RowConfig{AutoMerge: true}
-
+	
 	t.Run("columns only", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Node IP", "Pods", "Namespace", "Container", "RCE\nEXE", "RCE\nRUN"})
@@ -165,7 +165,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬─────────┬────────┬───────────┬───────────┬─────┬─────┐
 │   │ NODE IP │ PODS   │ NAMESPACE │ CONTAINER │ RCE │ RCE │
@@ -188,7 +188,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │   │         │        │           │ 7         │  5  │  3  │
 └───┴─────────┴────────┴───────────┴───────────┴─────┴─────┘`)
 	})
-
+	
 	t.Run("columns only with hidden columns", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Node IP", "Pods", "Namespace", "Container", "RCE\nEXE", "RCE\nRUN"})
@@ -210,7 +210,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌─────────┬────────┬───────────┐
 │ NODE IP │ PODS   │ NAMESPACE │
@@ -232,7 +232,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │         │        │           │
 └─────────┴────────┴───────────┘`)
 	})
-
+	
 	t.Run("rows only", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Node IP", "Pods", "Namespace", "Container", "RCE", "RCE"}, rcAutoMerge)
@@ -252,7 +252,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬─────────┬────────┬───────────┬───────────┬───────────┐
 │   │ NODE IP │ PODS   │ NAMESPACE │ CONTAINER │    RCE    │
@@ -276,7 +276,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │   │         │        │           │ 7         │  5  │  3  │
 └───┴─────────┴────────┴───────────┴───────────┴─────┴─────┘`)
 	})
-
+	
 	t.Run("rows and columns", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Node IP", "Pods", "Namespace", "Container", "RCE", "RCE"}, rcAutoMerge)
@@ -300,7 +300,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬─────────┬────────┬───────────┬───────────┬───────────┐
 │   │ NODE IP │ PODS   │ NAMESPACE │ CONTAINER │    RCE    │
@@ -324,7 +324,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │   │         │        │           │ 7         │  5  │  3  │
 └───┴─────────┴────────┴───────────┴───────────┴─────┴─────┘`)
 	})
-
+	
 	t.Run("rows and columns no headers or footers", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendRow(Row{"1.1.1.1", "Pod 1A", "NS 1A", "C 1", "Y", "Y"}, rcAutoMerge)
@@ -340,7 +340,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌─────────┬────────┬───────┬─────┬───────┐
 │ 1.1.1.1 │ Pod 1A │ NS 1A │ C 1 │   Y   │
@@ -358,7 +358,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │ 2.2.2.2 │ Pod 2  │ NS 3  │ C 7 │     Y │
 └─────────┴────────┴───────┴─────┴───────┘`)
 	})
-
+	
 	t.Run("rows and columns no headers or footers with auto-index", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendRow(Row{"1.1.1.1", "Pod 1A", "NS 1A", "C 1", "Y", "Y"}, rcAutoMerge)
@@ -375,7 +375,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬─────────┬────────┬───────┬─────┬───┬───┐
 │   │    A    │    B   │   C   │  D  │ E │ F │
@@ -395,7 +395,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │ 7 │ 2.2.2.2 │ Pod 2  │ NS 3  │ C 7 │     Y │
 └───┴─────────┴────────┴───────┴─────┴───────┘`)
 	})
-
+	
 	t.Run("rows and columns and footers", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Node IP", "Pods", "Namespace", "Container", "RCE", "RCE", "ID"}, rcAutoMerge)
@@ -423,7 +423,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬─────────┬────────┬───────────┬───────────┬───────────┬─────┐
 │   │ NODE IP │ PODS   │ NAMESPACE │ CONTAINER │    RCE    │  ID │
@@ -455,7 +455,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │   │                              │           │     5     │     │
 └───┴──────────────────────────────┴───────────┴───────────┴─────┘`)
 	})
-
+	
 	t.Run("samurai sudoku", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendRow(Row{"1.1\n1.1", "1.2\n1.2", "1.3\n1.3", " ", "2.1\n2.1", "2.2\n2.2", "2.3\n2.3"})
@@ -474,7 +474,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		tw.Style().Options.DrawBorder = true
 		tw.Style().Options.SeparateRows = true
 		tw.Style().Options.SeparateColumns = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬───┬───┬───┬───┬───┬───┐
 │1.1│1.2│1.3│   │2.1│2.2│2.3│
@@ -499,7 +499,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │3.7│3.8│3.9│   │4.7│4.8│4.9│
 └───┴───┴───┴───┴───┴───┴───┘`)
 	})
-
+	
 	t.Run("long column no merge", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Column 1", "Column 2", "Column 3", "Column 4", "Column 5", "Column 6", "Column 7", "Column 8"}, rcAutoMerge)
@@ -515,7 +515,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬──────────┬──────────┬──────────┬──────────┬──────────────────────────┬──────────────────────────┬──────────────────────────┬──────────────────────────┐
 │   │ COLUMN 1 │ COLUMN 2 │ COLUMN 3 │ COLUMN 4 │         COLUMN 5         │         COLUMN 6         │         COLUMN 7         │         COLUMN 8         │
@@ -532,7 +532,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │ 3 │ 1.1.1.1  │ Pod 1A   │ NS 1A    │ C 2      │                                                     Y                                                     │
 └───┴──────────┴──────────┴──────────┴──────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────┘`)
 	})
-
+	
 	t.Run("long column partially merged #1", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Column 1", "Column 2", "Column 3", "Column 4", "Column 5", "Column 6", "Column 7", "Column 8"}, rcAutoMerge)
@@ -548,7 +548,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬──────────┬──────────┬──────────┬──────────┬─────────────┬─────────────┬─────────────┬─────────────┐
 │   │ COLUMN 1 │ COLUMN 2 │ COLUMN 3 │ COLUMN 4 │   COLUMN 5  │   COLUMN 6  │   COLUMN 7  │   COLUMN 8  │
@@ -565,7 +565,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │ 3 │ 1.1.1.1  │ Pod 1A   │ NS 1A    │ C 2      │                           Y                           │
 └───┴──────────┴──────────┴──────────┴──────────┴───────────────────────────────────────────────────────┘`)
 	})
-
+	
 	t.Run("long column partially merged #2", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Column 1", "Column 2", "Column 3", "Column 4", "Column 5", "Column 6", "Column 7", "Column 8"}, rcAutoMerge)
@@ -581,7 +581,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬──────────┬──────────┬──────────┬──────────┬──────────┬──────────┬──────────┬──────────────────────────┐
 │   │ COLUMN 1 │ COLUMN 2 │ COLUMN 3 │ COLUMN 4 │ COLUMN 5 │ COLUMN 6 │ COLUMN 7 │         COLUMN 8         │
@@ -598,7 +598,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │ 3 │ 1.1.1.1  │ Pod 1A   │ NS 1A    │ C 2      │                             Y                             │
 └───┴──────────┴──────────┴──────────┴──────────┴───────────────────────────────────────────────────────────┘`)
 	})
-
+	
 	t.Run("long column fully merged", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Column 1", "Column 2", "Column 3", "Column 4", "Column 5", "Column 6", "Column 7", "Column 8"}, rcAutoMerge)
@@ -614,7 +614,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬──────────┬──────────┬──────────┬──────────┬──────────┬──────────┬──────────┬──────────┐
 │   │ COLUMN 1 │ COLUMN 2 │ COLUMN 3 │ COLUMN 4 │ COLUMN 5 │ COLUMN 6 │ COLUMN 7 │ COLUMN 8 │
@@ -631,7 +631,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │ 3 │ 1.1.1.1  │ Pod 1A   │ NS 1A    │ C 2      │                     Y                     │
 └───┴──────────┴──────────┴──────────┴──────────┴───────────────────────────────────────────┘`)
 	})
-
+	
 	t.Run("headers too", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Node IP", "Pods", "Namespace", "Container", "RCE", "RCE"}, rcAutoMerge)
@@ -652,7 +652,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬─────────┬────────┬───────────┬───────────┬───────────┐
 │   │ NODE IP │ PODS   │ NAMESPACE │ CONTAINER │    RCE    │
@@ -679,7 +679,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │   │                              │ 6         │     4     │
 └───┴──────────────────────────────┴───────────┴───────────┘`)
 	})
-
+	
 	t.Run("headers and footers too", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Node IP", "Pods", "Namespace", "Container", "RCE1", "RCE2"}, rcAutoMerge)
@@ -700,7 +700,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬─────────┬────────┬───────────┬───────────┬──────┬──────┐
 │   │ NODE IP │ PODS   │ NAMESPACE │ CONTAINER │ RCE1 │ RCE2 │
@@ -727,7 +727,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │   │                              │ 6         │      4      │
 └───┴──────────────────────────────┴───────────┴─────────────┘`)
 	})
-
+	
 	t.Run("long header column", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"Node IP", "Pods", "Namespace", "Container", "RCE1", "RCE2", "RCE3"}, rcAutoMerge)
@@ -749,7 +749,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬─────────┬────────┬───────────┬───────────┬──────┬──────┬──────┐
 │   │ NODE IP │ PODS   │ NAMESPACE │ CONTAINER │ RCE1 │ RCE2 │ RCE3 │
@@ -776,7 +776,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 │   │                              │ 6         │      4      │   3  │
 └───┴──────────────────────────────┴───────────┴─────────────┴──────┘`)
 	})
-
+	
 	t.Run("everything", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(Row{"COLUMNS", "COLUMNS", "COLUMNS", "COLUMNS", "COLUMNS", "COLUMNS", "COLUMNS"}, rcAutoMerge)
@@ -800,7 +800,7 @@ func TestTable_Render_AutoMerge(t *testing.T) {
 		})
 		tw.SetStyle(StyleLight)
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutput(t, tw.Render(), `
 ┌───┬───────────────────────────────────────────────────┐
 │   │                      COLUMNS                      │
@@ -841,7 +841,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
 +-----+------------+-----------+--------+-----------------------------+
 |     |            | TOTAL     |  10000 |                             |
 +-----+------------+-----------+--------+-----------------------------+`)
-
+	
 	table.Style().Options = OptionsNoBorders
 	compareOutput(t, table.Render(), `
    # | FIRST NAME | LAST NAME | SALARY |                             
@@ -851,7 +851,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
  300 | Tyrion     | Lannister |   5000 |                             
 -----+------------+-----------+--------+-----------------------------
      |            | TOTAL     |  10000 |                             `)
-
+	
 	table.Style().Options.SeparateColumns = false
 	compareOutput(t, table.Render(), `
    #  FIRST NAME  LAST NAME  SALARY                              
@@ -861,7 +861,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
  300  Tyrion      Lannister    5000                              
 -----------------------------------------------------------------
                   TOTAL       10000                              `)
-
+	
 	table.Style().Options.SeparateFooter = false
 	compareOutput(t, table.Render(), `
    #  FIRST NAME  LAST NAME  SALARY                              
@@ -870,7 +870,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
   20  Jon         Snow         2000  You know nothing, Jon Snow! 
  300  Tyrion      Lannister    5000                              
                   TOTAL       10000                              `)
-
+	
 	table.Style().Options = OptionsNoBordersAndSeparators
 	compareOutput(t, table.Render(), `
    #  FIRST NAME  LAST NAME  SALARY                              
@@ -878,7 +878,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
   20  Jon         Snow         2000  You know nothing, Jon Snow! 
  300  Tyrion      Lannister    5000                              
                   TOTAL       10000                              `)
-
+	
 	table.Style().Options.DrawBorder = true
 	compareOutput(t, table.Render(), `
 +-----------------------------------------------------------------+
@@ -888,7 +888,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
 | 300  Tyrion      Lannister    5000                              |
 |                  TOTAL       10000                              |
 +-----------------------------------------------------------------+`)
-
+	
 	table.Style().Options.SeparateFooter = true
 	compareOutput(t, table.Render(), `
 +-----------------------------------------------------------------+
@@ -899,7 +899,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
 +-----------------------------------------------------------------+
 |                  TOTAL       10000                              |
 +-----------------------------------------------------------------+`)
-
+	
 	table.Style().Options.SeparateHeader = true
 	compareOutput(t, table.Render(), `
 +-----------------------------------------------------------------+
@@ -911,7 +911,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
 +-----------------------------------------------------------------+
 |                  TOTAL       10000                              |
 +-----------------------------------------------------------------+`)
-
+	
 	table.Style().Options.SeparateRows = true
 	compareOutput(t, table.Render(), `
 +-----------------------------------------------------------------+
@@ -925,7 +925,7 @@ func TestTable_Render_BorderAndSeparators(t *testing.T) {
 +-----------------------------------------------------------------+
 |                  TOTAL       10000                              |
 +-----------------------------------------------------------------+`)
-
+	
 	table.Style().Options.SeparateColumns = true
 	compareOutput(t, table.Render(), `
 +-----+------------+-----------+--------+-----------------------------+
@@ -946,7 +946,7 @@ func TestTable_Render_BorderAndSeparators_Colored(t *testing.T) {
 	table.AppendHeader(testHeader)
 	table.AppendRows(testRows)
 	table.AppendFooter(testFooter)
-
+	
 	compareOutput(t, table.Render(), `
 +-----+------------+-----------+--------+-----------------------------+
 |   # | FIRST NAME | LAST NAME | SALARY |                             |
@@ -957,7 +957,7 @@ func TestTable_Render_BorderAndSeparators_Colored(t *testing.T) {
 +-----+------------+-----------+--------+-----------------------------+
 |     |            | TOTAL     |  10000 |                             |
 +-----+------------+-----------+--------+-----------------------------+`)
-
+	
 	table.Style().Color.Border = text.Colors{text.FgRed}
 	table.Style().Color.Separator = text.Colors{text.FgYellow}
 	compareOutputColored(t, table.Render(), ""+
@@ -971,7 +971,7 @@ func TestTable_Render_BorderAndSeparators_Colored(t *testing.T) {
 		"\x1b[31m|\x1b[0m     \x1b[33m|\x1b[0m            \x1b[33m|\x1b[0m TOTAL     \x1b[33m|\x1b[0m  10000 \x1b[33m|\x1b[0m                             \x1b[31m|\x1b[0m\n"+
 		"\x1b[31m+\x1b[0m\x1b[31m-----\x1b[0m\x1b[31m+\x1b[0m\x1b[31m------------\x1b[0m\x1b[31m+\x1b[0m\x1b[31m-----------\x1b[0m\x1b[31m+\x1b[0m\x1b[31m--------\x1b[0m\x1b[31m+\x1b[0m\x1b[31m-----------------------------\x1b[0m\x1b[31m+\x1b[0m",
 	)
-
+	
 	table.SetStyle(StyleLight)
 	table.Style().Color.Border = text.Colors{text.FgRed}
 	table.Style().Color.Separator = text.Colors{text.FgYellow}
@@ -986,7 +986,7 @@ func TestTable_Render_BorderAndSeparators_Colored(t *testing.T) {
 		"\x1b[31m│\x1b[0m     \x1b[33m│\x1b[0m            \x1b[33m│\x1b[0m TOTAL     \x1b[33m│\x1b[0m  10000 \x1b[33m│\x1b[0m                             \x1b[31m│\x1b[0m\n"+
 		"\x1b[31m└\x1b[0m\x1b[31m─────\x1b[0m\x1b[31m┴\x1b[0m\x1b[31m────────────\x1b[0m\x1b[31m┴\x1b[0m\x1b[31m───────────\x1b[0m\x1b[31m┴\x1b[0m\x1b[31m────────\x1b[0m\x1b[31m┴\x1b[0m\x1b[31m─────────────────────────────\x1b[0m\x1b[31m┘\x1b[0m",
 	)
-
+	
 	table.SetTitle("Game of Thrones")
 	compareOutputColored(t, table.Render(), ""+
 		"\x1b[31m┌\x1b[0m\x1b[31m─────────────────────────────────────────────────────────────────────\x1b[0m\x1b[31m┐\x1b[0m\n"+
@@ -1017,7 +1017,7 @@ func TestTable_Render_Colored(t *testing.T) {
 		tw.Style().Options.SeparateFooter = true
 		tw.Style().Options.SeparateHeader = true
 		tw.Style().Options.SeparateRows = true
-
+		
 		compareOutputColored(t, tw.Render(), ""+
 			"\x1b[106;30m+\x1b[0m\x1b[106;30m---\x1b[0m\x1b[106;30m+\x1b[0m\x1b[106;30m-----\x1b[0m\x1b[106;30m+\x1b[0m\x1b[106;30m------------\x1b[0m\x1b[106;30m+\x1b[0m\x1b[106;30m-----------\x1b[0m\x1b[106;30m+\x1b[0m\x1b[106;30m--------\x1b[0m\x1b[106;30m+\x1b[0m\x1b[106;30m-----------------------------\x1b[0m\x1b[106;30m+\x1b[0m\n"+
 			"\x1b[106;30m|\x1b[0m\x1b[106;30m   \x1b[0m\x1b[106;30m|\x1b[0m\x1b[106;30m   # \x1b[0m\x1b[106;30m|\x1b[0m\x1b[106;30m FIRST NAME \x1b[0m\x1b[106;30m|\x1b[0m\x1b[106;30m LAST NAME \x1b[0m\x1b[106;30m|\x1b[0m\x1b[106;30m SALARY \x1b[0m\x1b[106;30m|\x1b[0m\x1b[106;30m                             \x1b[0m\x1b[106;30m|\x1b[0m\n"+
@@ -1036,7 +1036,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			"\x1b[46;30m+\x1b[0m\x1b[46;30m---\x1b[0m\x1b[46;30m+\x1b[0m\x1b[46;30m-----\x1b[0m\x1b[46;30m+\x1b[0m\x1b[46;30m------------\x1b[0m\x1b[46;30m+\x1b[0m\x1b[46;30m-----------\x1b[0m\x1b[46;30m+\x1b[0m\x1b[46;30m--------\x1b[0m\x1b[46;30m+\x1b[0m\x1b[46;30m-----------------------------\x1b[0m\x1b[46;30m+\x1b[0m",
 		)
 	})
-
+	
 	t.Run("with borders", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(testHeader)
@@ -1051,7 +1051,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			RowAlternate: text.Colors{text.FgHiGreen},
 			Footer:       text.Colors{text.FgBlue},
 		}
-
+		
 		compareOutputColored(t, tw.Render(), ""+
 			"\x1b[33m+\x1b[0m\x1b[33m---------------------------------------------------------------------\x1b[0m\x1b[33m+\x1b[0m\n"+
 			"\x1b[33m|\x1b[0m\x1b[33m Game of Thrones                                                     \x1b[0m\x1b[33m|\x1b[0m\n"+
@@ -1069,7 +1069,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			"\x1b[34m+\x1b[0m\x1b[34m-----\x1b[0m\x1b[34m+\x1b[0m\x1b[34m------------\x1b[0m\x1b[34m+\x1b[0m\x1b[34m-----------\x1b[0m\x1b[34m+\x1b[0m\x1b[34m--------\x1b[0m\x1b[34m+\x1b[0m\x1b[34m-----------------------------\x1b[0m\x1b[34m+\x1b[0m",
 		)
 	})
-
+	
 	t.Run("with borders and separators not colored", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(testHeader)
@@ -1085,7 +1085,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			Footer:       text.Colors{text.FgBlue},
 		}
 		tw.Style().Options.DoNotColorBordersAndSeparators = true
-
+		
 		compareOutputColored(t, tw.Render(), ""+
 			"+---------------------------------------------------------------------+\n"+
 			"|\x1b[33m Game of Thrones                                                     \x1b[0m|\n"+
@@ -1103,7 +1103,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			"+-----+------------+-----------+--------+-----------------------------+",
 		)
 	})
-
+	
 	t.Run("column customizations", func(t *testing.T) {
 		tw := NewWriter()
 		tw.AppendHeader(testHeader)
@@ -1119,7 +1119,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			{Number: 5, Colors: text.Colors{text.FgCyan}},
 		})
 		tw.SetStyle(StyleRounded)
-
+		
 		compareOutputColored(t, tw.Render(), ""+
 			"╭─────┬────────────┬───────────┬────────┬─────────────────────────────╮\n"+
 			"│\x1b[91;1m   # \x1b[0m│\x1b[91;1m FIRST NAME \x1b[0m│\x1b[91;1m LAST NAME \x1b[0m│\x1b[91;1m SALARY \x1b[0m│                             │\n"+
@@ -1136,7 +1136,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			"A Song of Ice and Fire",
 		)
 	})
-
+	
 	t.Run("colored table within table", func(t *testing.T) {
 		table := Table{}
 		table.AppendHeader(testHeader)
@@ -1144,12 +1144,12 @@ func TestTable_Render_Colored(t *testing.T) {
 		table.AppendFooter(testFooter)
 		table.SetStyle(StyleColoredBright)
 		table.SetIndexColumn(1)
-
+		
 		// colored is simple; render the colored table into another table
 		tableOuter := Table{}
 		tableOuter.AppendRow(Row{table.Render()})
 		tableOuter.SetStyle(StyleRounded)
-
+		
 		compareOutputColored(t, tableOuter.Render(), ""+
 			"╭───────────────────────────────────────────────────────────────────╮\n"+
 			"│ \x1b[106;30m   # \x1b[0m\x1b[106;30m FIRST NAME \x1b[0m\x1b[106;30m LAST NAME \x1b[0m\x1b[106;30m SALARY \x1b[0m\x1b[106;30m                             \x1b[0m │\n"+
@@ -1160,7 +1160,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			"╰───────────────────────────────────────────────────────────────────╯",
 		)
 	})
-
+	
 	t.Run("colored table within colored table", func(t *testing.T) {
 		table := Table{}
 		table.AppendHeader(testHeader)
@@ -1168,14 +1168,14 @@ func TestTable_Render_Colored(t *testing.T) {
 		table.AppendFooter(testFooter)
 		table.SetStyle(StyleColoredBright)
 		table.SetIndexColumn(1)
-
+		
 		// colored is simple; render the colored table into another colored table
 		tableOuter := Table{}
 		tableOuter.AppendHeader(Row{"Colored Table within a Colored Table"})
 		tableOuter.AppendRow(Row{"\n" + table.Render() + "\n"})
 		tableOuter.SetColumnConfigs([]ColumnConfig{{Number: 1, AlignHeader: text.AlignCenter}})
 		tableOuter.SetStyle(StyleColoredBright)
-
+		
 		compareOutputColored(t, tableOuter.Render(), ""+
 			"\x1b[106;30m                COLORED TABLE WITHIN A COLORED TABLE               \x1b[0m\n"+
 			"\x1b[107;30m                                                                   \x1b[0m\n"+
@@ -1187,7 +1187,7 @@ func TestTable_Render_Colored(t *testing.T) {
 			"\x1b[107;30m                                                                   \x1b[0m",
 		)
 	})
-
+	
 	t.Run("colored table with auto-index", func(t *testing.T) {
 		table := Table{}
 		table.AppendHeader(testHeader)
@@ -1196,7 +1196,7 @@ func TestTable_Render_Colored(t *testing.T) {
 		table.SetAutoIndex(true)
 		table.SetStyle(StyleColoredDark)
 		table.SetTitle(testTitle2)
-
+		
 		compareOutputColored(t, table.Render(), ""+
 			"\x1b[106;30;1m When you play the Game of Thrones, you win or you die. There is no \x1b[0m\n"+
 			"\x1b[106;30;1m middle ground.                                                     \x1b[0m\n"+
@@ -1226,7 +1226,7 @@ func TestTable_Render_ColumnConfigs(t *testing.T) {
 		}
 		return strings.Replace(fmt.Sprint(val), "ry", "riii", -1)
 	})
-
+	
 	tw := NewWriter()
 	tw.AppendHeader(testHeaderMultiLine)
 	tw.AppendRows(testRows)
@@ -1282,7 +1282,7 @@ func TestTable_Render_ColumnConfigs(t *testing.T) {
 		},
 	})
 	tw.SetStyle(styleTest)
-
+	
 	compareOutputColored(t, tw.Render(), ""+
 		"(---^-----^-----------^------------^------------------^-----------------------------)\n"+
 		"[< >|<  #>|\x1b[41;30;1m< (H_FIRST>\x1b[0m|\x1b[42;30;1m<LAST      >\x1b[0m|\x1b[44;30;1m<                >\x1b[0m|<                           >]\n"+
@@ -1312,15 +1312,15 @@ func TestTable_Render_HiddenColumns(t *testing.T) {
 	tw.AppendHeader(testHeader)
 	tw.AppendRows(testRows)
 	tw.AppendFooter(testFooter)
-
+	
 	// ensure sorting is done before hiding the columns
 	tw.SortBy([]SortBy{
 		{Name: "Salary", Mode: DscNumeric},
 	})
-
+	
 	t.Run("no columns hidden", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns(nil))
-
+		
 		compareOutput(t, tw.Render(), `
 +-----+------------+-------------+--------+-------------------------------+
 |   # | FIRST NAME | LAST NAME   | SALARY |                               |
@@ -1332,16 +1332,16 @@ func TestTable_Render_HiddenColumns(t *testing.T) {
 |     |            | TOTAL       |  10000 |                               |
 +-----+------------+-------------+--------+-------------------------------+`)
 	})
-
+	
 	t.Run("every column hidden", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{0, 1, 2, 3, 4}))
-
+		
 		compareOutput(t, tw.Render(), "")
 	})
-
+	
 	t.Run("some columns hidden (1)", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{1, 2, 3, 4}))
-
+		
 		compareOutput(t, tw.Render(), `
 +-----+
 |   # |
@@ -1353,10 +1353,10 @@ func TestTable_Render_HiddenColumns(t *testing.T) {
 |     |
 +-----+`)
 	})
-
+	
 	t.Run("some columns hidden (2)", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{1, 2, 3}))
-
+		
 		compareOutput(t, tw.Render(), `
 +-----+-------------------------------+
 |   # |                               |
@@ -1368,10 +1368,10 @@ func TestTable_Render_HiddenColumns(t *testing.T) {
 |     |                               |
 +-----+-------------------------------+`)
 	})
-
+	
 	t.Run("some columns hidden (3)", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{0, 4}))
-
+		
 		compareOutput(t, tw.Render(), `
 +------------+-------------+--------+
 | FIRST NAME | LAST NAME   | SALARY |
@@ -1383,10 +1383,10 @@ func TestTable_Render_HiddenColumns(t *testing.T) {
 |            | TOTAL       |  10000 |
 +------------+-------------+--------+`)
 	})
-
+	
 	t.Run("first column hidden", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{0}))
-
+		
 		compareOutput(t, tw.Render(), `
 +------------+-------------+--------+-------------------------------+
 | FIRST NAME | LAST NAME   | SALARY |                               |
@@ -1398,10 +1398,10 @@ func TestTable_Render_HiddenColumns(t *testing.T) {
 |            | TOTAL       |  10000 |                               |
 +------------+-------------+--------+-------------------------------+`)
 	})
-
+	
 	t.Run("column hidden in the middle", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{1}))
-
+		
 		compareOutput(t, tw.Render(), `
 +-----+-------------+--------+-------------------------------+
 |   # | LAST NAME   | SALARY |                               |
@@ -1413,10 +1413,10 @@ func TestTable_Render_HiddenColumns(t *testing.T) {
 |     | TOTAL       |  10000 |                               |
 +-----+-------------+--------+-------------------------------+`)
 	})
-
+	
 	t.Run("last column hidden", func(t *testing.T) {
 		tw.SetColumnConfigs(generateColumnConfigsWithHiddenColumns([]int{4}))
-
+		
 		compareOutput(t, tw.Render(), `
 +-----+------------+-------------+--------+
 |   # | FIRST NAME | LAST NAME   | SALARY |
@@ -1437,7 +1437,7 @@ func TestTable_Render_Paged(t *testing.T) {
 	tw.AppendRow(testRowMultiLine)
 	tw.AppendFooter(Row{"", "", "Total", 10000})
 	tw.SetPageSize(1)
-
+	
 	compareOutput(t, tw.Render(), `
 +-----+------------+-----------+--------+-----------------------------+
 |   # | FIRST NAME | LAST NAME | SALARY |                             |
@@ -1494,7 +1494,7 @@ func TestTable_Render_Reset(t *testing.T) {
 	tw.AppendRows(testRows)
 	tw.AppendFooter(testFooter)
 	tw.SetStyle(StyleLight)
-
+	
 	compareOutput(t, tw.Render(), `
 ┌─────┬────────────┬───────────┬────────┬─────────────────────────────┐
 │   # │ FIRST NAME │ LAST NAME │ SALARY │                             │
@@ -1505,7 +1505,7 @@ func TestTable_Render_Reset(t *testing.T) {
 ├─────┼────────────┼───────────┼────────┼─────────────────────────────┤
 │     │            │ TOTAL     │  10000 │                             │
 └─────┴────────────┴───────────┴────────┴─────────────────────────────┘`)
-
+	
 	tw.ResetFooters()
 	compareOutput(t, tw.Render(), `
 ┌─────┬────────────┬───────────┬────────┬─────────────────────────────┐
@@ -1515,7 +1515,7 @@ func TestTable_Render_Reset(t *testing.T) {
 │  20 │ Jon        │ Snow      │   2000 │ You know nothing, Jon Snow! │
 │ 300 │ Tyrion     │ Lannister │   5000 │                             │
 └─────┴────────────┴───────────┴────────┴─────────────────────────────┘`)
-
+	
 	tw.ResetHeaders()
 	compareOutput(t, tw.Render(), `
 ┌─────┬────────┬───────────┬──────┬─────────────────────────────┐
@@ -1523,7 +1523,7 @@ func TestTable_Render_Reset(t *testing.T) {
 │  20 │ Jon    │ Snow      │ 2000 │ You know nothing, Jon Snow! │
 │ 300 │ Tyrion │ Lannister │ 5000 │                             │
 └─────┴────────┴───────────┴──────┴─────────────────────────────┘`)
-
+	
 	tw.ResetRows()
 	assert.Empty(t, tw.Render())
 }
@@ -1547,7 +1547,7 @@ func TestTable_Render_RowPainter(t *testing.T) {
 	})
 	tw.SetStyle(StyleLight)
 	tw.SortBy([]SortBy{{Name: "Salary", Mode: AscNumeric}})
-
+	
 	expectedOutLines := []string{
 		"┌─────┬────────────┬───────────┬────────┬─────────────────────────────┐",
 		"│   # │ FIRST NAME │ LAST NAME │ SALARY │                             │",
@@ -1564,7 +1564,7 @@ func TestTable_Render_RowPainter(t *testing.T) {
 	}
 	expectedOut := strings.Join(expectedOutLines, "\n")
 	assert.Equal(t, expectedOut, tw.Render())
-
+	
 	tw.SetStyle(StyleColoredBright)
 	tw.Style().Color.RowAlternate = tw.Style().Color.Row
 	expectedOutLines = []string{
@@ -1589,7 +1589,7 @@ func TestTable_Render_Sorted(t *testing.T) {
 	tw.AppendFooter(testFooter)
 	tw.SetStyle(StyleLight)
 	tw.SortBy([]SortBy{{Name: "Last Name", Mode: Asc}, {Name: "First Name", Mode: Asc}})
-
+	
 	compareOutput(t, tw.Render(), `┌─────┬────────────┬───────────┬────────┬─────────────────────────────┐
 │   # │ FIRST NAME │ LAST NAME │ SALARY │                             │
 ├─────┼────────────┼───────────┼────────┼─────────────────────────────┤
@@ -1620,7 +1620,7 @@ func TestTable_Render_Separator(t *testing.T) {
 	tw.AppendSeparator() // doesn't make any difference
 	tw.AppendFooter(testFooter)
 	tw.SetStyle(StyleLight)
-
+	
 	compareOutput(t, tw.Render(), `
 ┌─────┬────────────┬───────────┬────────┬─────────────────────────────┐
 │   # │ FIRST NAME │ LAST NAME │ SALARY │                             │
@@ -1645,7 +1645,7 @@ func TestTable_Render_Styles(t *testing.T) {
 	tw.AppendRows(testRows)
 	tw.AppendFooter(testFooter)
 	tw.SetStyle(StyleLight)
-
+	
 	styles := map[*Style]string{
 		&StyleDefault:                    "+-----+------------+-----------+--------+-----------------------------+\n|   # | FIRST NAME | LAST NAME | SALARY |                             |\n+-----+------------+-----------+--------+-----------------------------+\n|   1 | Arya       | Stark     |   3000 |                             |\n|  20 | Jon        | Snow      |   2000 | You know nothing, Jon Snow! |\n| 300 | Tyrion     | Lannister |   5000 |                             |\n+-----+------------+-----------+--------+-----------------------------+\n|     |            | TOTAL     |  10000 |                             |\n+-----+------------+-----------+--------+-----------------------------+",
 		&StyleBold:                       "┏━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃   # ┃ FIRST NAME ┃ LAST NAME ┃ SALARY ┃                             ┃\n┣━━━━━╋━━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\n┃   1 ┃ Arya       ┃ Stark     ┃   3000 ┃                             ┃\n┃  20 ┃ Jon        ┃ Snow      ┃   2000 ┃ You know nothing, Jon Snow! ┃\n┃ 300 ┃ Tyrion     ┃ Lannister ┃   5000 ┃                             ┃\n┣━━━━━╋━━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\n┃     ┃            ┃ TOTAL     ┃  10000 ┃                             ┃\n┗━━━━━┻━━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛",
@@ -1699,7 +1699,7 @@ func TestTable_Render_SuppressEmptyColumns(t *testing.T) {
 	tw.AppendRow(Row{11, "Sansa", "", 6000})
 	tw.AppendFooter(Row{"", "", "TOTAL", 10000})
 	tw.SetStyle(StyleLight)
-
+	
 	compareOutput(t, tw.Render(), `
 ┌─────┬────────────┬───────────┬────────┬─────────────────────────────┐
 │   # │ FIRST NAME │ LAST NAME │ SALARY │                             │
@@ -1711,7 +1711,7 @@ func TestTable_Render_SuppressEmptyColumns(t *testing.T) {
 ├─────┼────────────┼───────────┼────────┼─────────────────────────────┤
 │     │            │ TOTAL     │  10000 │                             │
 └─────┴────────────┴───────────┴────────┴─────────────────────────────┘`)
-
+	
 	tw.SuppressEmptyColumns()
 	compareOutput(t, tw.Render(), `
 ┌─────┬────────────┬────────┬─────────────────────────────┐
@@ -1732,13 +1732,13 @@ func TestTable_Render_TableWithinTable(t *testing.T) {
 	twInner.AppendRows(testRows)
 	twInner.AppendFooter(testFooter)
 	twInner.SetStyle(StyleLight)
-
+	
 	twOuter := NewWriter()
 	twOuter.AppendHeader(Row{"Table within a Table"})
 	twOuter.AppendRow(Row{twInner.Render()})
 	twOuter.SetColumnConfigs([]ColumnConfig{{Number: 1, AlignHeader: text.AlignCenter}})
 	twOuter.SetStyle(StyleDouble)
-
+	
 	compareOutput(t, twOuter.Render(), `
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║                           TABLE WITHIN A TABLE                          ║
@@ -1770,7 +1770,7 @@ func TestTable_Render_TableWithTransformers(t *testing.T) {
 		TransformerHeader: bolden,
 	}})
 	tw.SetStyle(StyleLight)
-
+	
 	expectedOut := []string{
 		"┌─────┬────────────┬───────────┬────────┬─────────────────────────────┐",
 		"│   # │ FIRST NAME │ LAST NAME │ \x1b[1mSALARY\x1b[0m │                             │",
@@ -1797,10 +1797,10 @@ func TestTable_Render_SetWidth_Title(t *testing.T) {
 	tw.AppendRows(testRows)
 	tw.AppendFooter(testFooter)
 	tw.SetTitle("Game Of Thrones")
-
+	
 	t.Run("length 20", func(t *testing.T) {
 		tw.SetAllowedRowLength(20)
-
+		
 		expectedOut := []string{
 			"+------------------+",
 			"| Game Of Thrones  |",
@@ -1814,13 +1814,13 @@ func TestTable_Render_SetWidth_Title(t *testing.T) {
 			"|     |            ~",
 			"+-----+----------- ~",
 		}
-
+		
 		assert.Equal(t, strings.Join(expectedOut, "\n"), tw.Render())
 	})
-
+	
 	t.Run("length 30", func(t *testing.T) {
 		tw.SetAllowedRowLength(30)
-
+		
 		expectedOut := []string{
 			"+----------------------------+",
 			"| Game Of Thrones            |",
@@ -1834,7 +1834,7 @@ func TestTable_Render_SetWidth_Title(t *testing.T) {
 			"|     |            | TOTAL   ~",
 			"+-----+------------+-------- ~",
 		}
-
+		
 		assert.Equal(t, strings.Join(expectedOut, "\n"), tw.Render())
 	})
 }
@@ -1851,7 +1851,7 @@ func TestTable_Render_WidthEnforcer(t *testing.T) {
 	tw.SetColumnConfigs([]ColumnConfig{
 		{Number: 2, WidthMax: 20, WidthMaxEnforcer: text.Trim},
 	})
-
+	
 	compareOutput(t, tw.Render(), `
 +------+----------------------+------------------+----------------------------+
 | U2   | Hey                  | 2021-04-19 13:37 | Yuh yuh yuh                |

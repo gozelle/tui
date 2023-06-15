@@ -3,8 +3,8 @@ package table
 import (
 	"fmt"
 	"strings"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 func (t *Table) analyzeAndStringify(row Row, hint renderHint) rowStr {
@@ -19,7 +19,7 @@ func (t *Table) analyzeAndStringify(row Row, hint renderHint) rowStr {
 		// update t.numColumns
 		t.numColumns = len(row)
 	}
-
+	
 	// convert each column to string and figure out if it has non-numeric data
 	rowOut := make(rowStr, len(row))
 	for colIdx, col := range row {
@@ -27,7 +27,7 @@ func (t *Table) analyzeAndStringify(row Row, hint renderHint) rowStr {
 		if !hint.isHeaderRow && !hint.isFooterRow && !t.columnIsNonNumeric[colIdx] && !isNumber(col) {
 			t.columnIsNonNumeric[colIdx] = true
 		}
-
+		
 		rowOut[colIdx] = t.analyzeAndStringifyColumn(colIdx, col, hint)
 	}
 	return rowOut
@@ -96,22 +96,22 @@ func (t *Table) extractMaxColumnLengthsFromRowForMergedColumns(colIdx int, merge
 func (t *Table) initForRender() {
 	// pick a default style if none was set until now
 	t.Style()
-
+	
 	// reset rendering state
 	t.reset()
-
+	
 	// initialize the column configs and normalize them
 	t.initForRenderColumnConfigs()
-
+	
 	// initialize and stringify all the raw rows
 	t.initForRenderRows()
-
+	
 	// find the longest continuous line in each column
 	t.initForRenderColumnLengths()
-
+	
 	// generate a separator row and calculate maximum row length
 	t.initForRenderRowSeparator()
-
+	
 	// reset the counter for the number of lines rendered
 	t.numLinesRendered = 0
 }
@@ -140,7 +140,7 @@ func (t *Table) initForRenderColumnLengths() {
 	t.extractMaxColumnLengths(t.rowsHeader, renderHint{isHeaderRow: true})
 	t.extractMaxColumnLengths(t.rows, renderHint{})
 	t.extractMaxColumnLengths(t.rowsFooter, renderHint{isFooterRow: true})
-
+	
 	// increase the column lengths if any are under the limits
 	for colIdx := range t.maxColumnLengths {
 		minWidth := t.getColumnWidthMin(colIdx)
@@ -155,7 +155,7 @@ func (t *Table) initForRenderHideColumns() {
 		return
 	}
 	colIdxMap := t.hideColumns()
-
+	
 	// re-create columnIsNonNumeric with new column indices
 	columnIsNonNumeric := make([]bool, t.numColumns)
 	for oldColIdx, nonNumeric := range t.columnIsNonNumeric {
@@ -164,7 +164,7 @@ func (t *Table) initForRenderHideColumns() {
 		}
 	}
 	t.columnIsNonNumeric = columnIsNonNumeric
-
+	
 	// re-create columnConfigMap with new column indices
 	columnConfigMap := make(map[int]ColumnConfig)
 	for oldColIdx, cc := range t.columnConfigMap {
@@ -178,7 +178,7 @@ func (t *Table) initForRenderHideColumns() {
 func (t *Table) initForRenderRows() {
 	// auto-index: calc the index column's max length
 	t.autoIndexVIndexMaxLength = len(fmt.Sprint(len(t.rowsRaw)))
-
+	
 	// stringify all the rows to make it easy to render
 	if t.rowPainter != nil {
 		t.rowsColors = make([]text.Colors, len(t.rowsRaw))
@@ -186,13 +186,13 @@ func (t *Table) initForRenderRows() {
 	t.rows = t.initForRenderRowsStringify(t.rowsRaw, renderHint{})
 	t.rowsFooter = t.initForRenderRowsStringify(t.rowsFooterRaw, renderHint{isFooterRow: true})
 	t.rowsHeader = t.initForRenderRowsStringify(t.rowsHeaderRaw, renderHint{isHeaderRow: true})
-
+	
 	// sort the rows as requested
 	t.initForRenderSortRows()
-
+	
 	// suppress columns without any content
 	t.initForRenderSuppressColumns()
-
+	
 	// strip out hidden columns
 	t.initForRenderHideColumns()
 }
@@ -236,7 +236,7 @@ func (t *Table) initForRenderSortRows() {
 	if len(t.sortBy) == 0 {
 		return
 	}
-
+	
 	// sort the rows
 	sortedRowIndices := t.getSortedRowIndices()
 	sortedRows := make([]rowStr, len(t.rows))
@@ -244,7 +244,7 @@ func (t *Table) initForRenderSortRows() {
 		sortedRows[idx] = t.rows[sortedRowIndices[idx]]
 	}
 	t.rows = sortedRows
-
+	
 	// sort the rowsColors
 	if len(t.rowsColors) > 0 {
 		sortedRowsColors := make([]text.Colors, len(t.rows))
@@ -264,7 +264,7 @@ func (t *Table) initForRenderSuppressColumns() {
 		}
 		return true
 	}
-
+	
 	if t.suppressEmptyColumns {
 		for colIdx := 0; colIdx < t.numColumns; colIdx++ {
 			if shouldSuppressColumn(colIdx) {

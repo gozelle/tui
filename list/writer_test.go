@@ -2,8 +2,8 @@ package list
 
 import (
 	"fmt"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 func Example() {
@@ -48,7 +48,7 @@ func Example() {
 	lw.Style().Format = text.FormatTitle
 	// render it
 	fmt.Printf("Simple List:\n%s", lw.Render())
-
+	
 	// Output: Simple List:
 	// ├ George. R. R. Martin
 	// │  └─ A Song Of Ice And Fire

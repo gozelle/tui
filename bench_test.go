@@ -4,10 +4,10 @@ import (
 	"io/ioutil"
 	"testing"
 	"time"
-
-	"github.com/jedib0t/go-pretty/v6/list"
-	"github.com/jedib0t/go-pretty/v6/progress"
-	"github.com/jedib0t/go-pretty/v6/table"
+	
+	"github.com/gozelle/tui/v6/list"
+	"github.com/gozelle/tui/v6/progress"
+	"github.com/gozelle/tui/v6/table"
 )
 
 var (
@@ -48,7 +48,7 @@ func BenchmarkProgress_Render(b *testing.B) {
 		time.Sleep(time.Millisecond * 100)
 		tracker.Increment(tracker.Total / 2)
 	}
-
+	
 	for i := 0; i < b.N; i++ {
 		pw := progress.NewWriter()
 		pw.SetAutoStop(true)

@@ -1,4 +1,4 @@
-module github.com/jedib0t/go-pretty/v6
+module github.com/gozelle/tui/v6
 
 go 1.16
 

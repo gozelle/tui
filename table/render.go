@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
-
-	"github.com/jedib0t/go-pretty/v6/text"
+	
+	"github.com/gozelle/tui/v6/text"
 )
 
 // Render renders the Table in a human-readable "pretty" format. Example:
@@ -20,26 +20,26 @@ import (
 //  └─────┴────────────┴───────────┴────────┴─────────────────────────────┘
 func (t *Table) Render() string {
 	t.initForRender()
-
+	
 	var out strings.Builder
 	if t.numColumns > 0 {
 		t.renderTitle(&out)
-
+		
 		// top-most border
 		t.renderRowsBorderTop(&out)
-
+		
 		// header rows
 		t.renderRowsHeader(&out)
-
+		
 		// (data) rows
 		t.renderRows(&out, t.rows, renderHint{})
-
+		
 		// footer rows
 		t.renderRowsFooter(&out)
-
+		
 		// bottom-most border
 		t.renderRowsBorderBottom(&out)
-
+		
 		// caption
 		if t.caption != "" {
 			out.WriteRune('\n')
@@ -51,7 +51,7 @@ func (t *Table) Render() string {
 
 func (t *Table) renderColumn(out *strings.Builder, row rowStr, colIdx int, maxColumnLength int, hint renderHint) int {
 	numColumnsRendered := 1
-
+	
 	// when working on the first column, and autoIndex is true, insert a new
 	// column with the row number on it.
 	if colIdx == 0 && t.autoIndex {
@@ -59,12 +59,12 @@ func (t *Table) renderColumn(out *strings.Builder, row rowStr, colIdx int, maxCo
 		hintAutoIndex.isAutoIndexColumn = true
 		t.renderColumnAutoIndex(out, hintAutoIndex)
 	}
-
+	
 	// when working on column number 2 or more, render the column separator
 	if colIdx > 0 {
 		t.renderColumnSeparator(out, row, colIdx, hint)
 	}
-
+	
 	// extract the text, convert-case if not-empty and align horizontally
 	mergeVertically := t.shouldMergeCellsVertically(colIdx, hint)
 	var colStr string
@@ -74,7 +74,7 @@ func (t *Table) renderColumn(out *strings.Builder, row rowStr, colIdx int, maxCo
 		colStr = t.getFormat(hint).Apply(row[colIdx])
 	}
 	align := t.getAlign(colIdx, hint)
-
+	
 	// if horizontal cell merges are enabled, look ahead and see how many cells
 	// have the same content and merge them all until a cell with a different
 	// content is found; override alignment to Center in this case
@@ -93,21 +93,21 @@ func (t *Table) renderColumn(out *strings.Builder, row rowStr, colIdx int, maxCo
 		}
 	}
 	colStr = align.Apply(colStr, maxColumnLength)
-
+	
 	// pad both sides of the column
 	if !hint.isSeparatorRow || (hint.isSeparatorRow && mergeVertically) {
 		colStr = t.style.Box.PaddingLeft + colStr + t.style.Box.PaddingRight
 	}
-
+	
 	t.renderColumnColorized(out, colIdx, colStr, hint)
-
+	
 	return colIdx + numColumnsRendered
 }
 
 func (t *Table) renderColumnAutoIndex(out *strings.Builder, hint renderHint) {
 	var outAutoIndex strings.Builder
 	outAutoIndex.Grow(t.maxColumnLengths[0])
-
+	
 	if hint.isSeparatorRow {
 		numChars := t.autoIndexVIndexMaxLength + utf8.RuneCountInString(t.style.Box.PaddingLeft) +
 			utf8.RuneCountInString(t.style.Box.PaddingRight)
@@ -125,7 +125,7 @@ func (t *Table) renderColumnAutoIndex(out *strings.Builder, hint renderHint) {
 		outAutoIndex.WriteString(text.AlignRight.Apply(rowNumStr, t.autoIndexVIndexMaxLength))
 		outAutoIndex.WriteString(t.style.Box.PaddingRight)
 	}
-
+	
 	if t.style.Color.IndexColumn != nil {
 		colors := t.style.Color.IndexColumn
 		if hint.isFooterRow {
@@ -165,7 +165,7 @@ func (t *Table) renderColumnColorized(out *strings.Builder, colIdx int, colStr s
 func (t *Table) renderColumnSeparator(out *strings.Builder, row rowStr, colIdx int, hint renderHint) {
 	if t.style.Options.SeparateColumns {
 		separator := t.getColumnSeparator(row, colIdx, hint)
-
+		
 		colors := t.getSeparatorColors(hint)
 		if colors.EscapeSeq() != "" {
 			out.WriteString(colors.Sprint(separator))
@@ -181,7 +181,7 @@ func (t *Table) renderLine(out *strings.Builder, row rowStr, hint renderHint) {
 	if out.Len() > 0 {
 		out.WriteRune('\n')
 	}
-
+	
 	// use a brand-new strings.Builder if a row length limit has been set
 	var outLine *strings.Builder
 	if t.allowedRowLength > 0 {
@@ -191,7 +191,7 @@ func (t *Table) renderLine(out *strings.Builder, row rowStr, hint renderHint) {
 	}
 	// grow the strings.Builder to the maximum possible row length
 	outLine.Grow(t.maxRowLength)
-
+	
 	nextColIdx := 0
 	t.renderMarginLeft(outLine, hint)
 	for colIdx, maxColumnLength := range t.maxColumnLengths {
@@ -201,12 +201,12 @@ func (t *Table) renderLine(out *strings.Builder, row rowStr, hint renderHint) {
 		nextColIdx = t.renderColumn(outLine, row, colIdx, maxColumnLength, hint)
 	}
 	t.renderMarginRight(outLine, hint)
-
+	
 	// merge the strings.Builder objects if a new one was created earlier
 	if outLine != out {
 		t.renderLineMergeOutputs(out, outLine)
 	}
-
+	
 	// if a page size has been set, and said number of lines has already
 	// been rendered, and the header is not being rendered right now, render
 	// the header all over again with a spacing line
@@ -266,7 +266,7 @@ func (t *Table) renderRow(out *strings.Builder, row rowStr, hint renderHint) {
 		// and in the process find the max. number of lines in any column in
 		// this row
 		colMaxLines, rowWrapped := t.wrapRow(row)
-
+		
 		// if there is just 1 line in all columns, add the row as such; else
 		// split each column into individual lines and render them one-by-one
 		if colMaxLines == 1 {
@@ -311,7 +311,7 @@ func (t *Table) renderRows(out *strings.Builder, rows []rowStr, hint renderHint)
 		hint.isLastRow = rowIdx == len(rows)-1
 		hint.rowNumber = rowIdx + 1
 		t.renderRow(out, row, hint)
-
+		
 		if (t.style.Options.SeparateRows && rowIdx < len(rows)-1) || // last row before footer
 			(t.separators[rowIdx] && rowIdx != len(rows)-1) { // manually added separator not after last row
 			hint.isFirstRow = false
@@ -350,7 +350,7 @@ func (t *Table) renderRowsFooter(out *strings.Builder) {
 func (t *Table) renderRowsHeader(out *strings.Builder) {
 	if len(t.rowsHeader) > 0 || t.autoIndex {
 		hintSeparator := renderHint{isHeaderRow: true, isLastRow: true, isSeparatorRow: true}
-
+		
 		if len(t.rowsHeader) > 0 {
 			t.renderRows(out, t.rowsHeader, renderHint{isHeaderRow: true})
 			hintSeparator.rowNumber = len(t.rowsHeader)
@@ -376,7 +376,7 @@ func (t *Table) renderTitle(out *strings.Builder) {
 			out.WriteString(colorsBorder.Sprint(text.RepeatAndTrim(t.style.Box.MiddleHorizontal, lenBorder)))
 			out.WriteString(colorsBorder.Sprint(t.style.Box.TopRight))
 		}
-
+		
 		lenText := rowLength - text.RuneWidthWithoutEscSequences(t.style.Box.PaddingLeft+t.style.Box.PaddingRight)
 		if t.style.Options.DrawBorder {
 			lenText -= text.RuneWidthWithoutEscSequences(t.style.Box.Left + t.style.Box.Right)
@@ -393,7 +393,7 @@ func (t *Table) renderTitleLine(out *strings.Builder, lenText int, titleLine str
 	titleLine = t.style.Title.Format.Apply(titleLine)
 	titleLine = t.style.Title.Align.Apply(titleLine, lenText)
 	titleLine = t.style.Box.PaddingLeft + titleLine + t.style.Box.PaddingRight
-
+	
 	if out.Len() > 0 {
 		out.WriteRune('\n')
 	}
